@@ -1,0 +1,345 @@
+﻿@{
+    ViewBag.Title = "Search - HotelBeds";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model  HotelBedsApp.ViewModel.SearchCriteriaViewModel
+ 
+ @section customhead {
+ 
+ 
+ 
+ @Scripts.Render("~/bundles/hotelbedscripts")
+ @Styles.Render("~/Content/dates") 
+     
+  <script type="text/javascript">
+
+      $(document).ready(function () {
+
+          InitSearch('@ViewBag.CurrentDatetime', '@ViewBag.ServerDatetime', '@Url.Action("GetAutocompleteList", "Home")');
+          InitDates();
+
+      });
+       
+ </script>
+  }
+
+<form id="form" name="form" method="post" action="@Url.Action("Index", "Home")"  data-ajax="false">
+  
+ <dl>
+    <dt id="lblDestinationText" >Destination Code<span class="asterisk"></span></dt>
+    <dt>
+        @Html.EditorFor(model => model.DestinationCode ,new { Value = "MCO" })
+        @Html.ValidationMessageFor(model => model.DestinationCode)
+        
+        
+    </dt>
+</dl>
+<dl>
+    <dt>Country Code<span class="asterisk"></span></dt>
+    <dt>
+        @Html.EditorFor(model => model.CountryCode, new { Value = "USA" })
+        @Html.ValidationMessageFor(model => model.CountryCode)
+        
+         
+    </dt>
+</dl>
+<dl>
+    <dt>Hotel Code(s) <span class="asterisk"></span></dt>
+    <dt>
+        @Html.TextBoxFor(model => model.HotelCodes )
+        @Html.ValidationMessageFor(model => model.HotelCodes)
+        
+        
+    </dt>
+</dl>
+ 
+<dl>
+    <dt></dt>
+    <dt style="margin-top:10px;">Check-in <span class="asterisk">*</span></dt>
+    <dt>
+       
+        @Html.TextBoxFor(model => model.CheckInDate, new
+   {
+        
+       @class = "dates",
+       @Value = Model.CheckInDate.Date.ToString("dd/MM/yyyy"), @*style = "background-image: url(" + Url.Content("~/content/images/calendaricon.png") + " ); border: none; background-position:right; background-repeat:no-repeat; "*@ }) 
+        @Html.ValidationMessageFor(model => model.CheckInDate)  
+    
+     
+    </dt>
+     <dt>Check-out <span class="asterisk">*</span></dt>
+    <dt>
+        @Html.TextBoxFor(model => model.CheckOutDate, new
+   {
+       
+       @class = "dates",
+       @Value = Model.CheckOutDate.Date.ToString("dd/MM/yyyy"), @*style = "background-image: url(" + Url.Content("~/content/images/calendaricon.png") + " ); border: none; background-position:right; background-repeat:no-repeat; " *@})  
+        @Html.ValidationMessageFor(model => model.CheckOutDate)
+    </dt>
+</dl>
+ 
+<div class="ui-grid-b" > 
+  <div class="ui-block-a" style="text-align:center; font-weight:bold;font-size:10px;margin-right:6px;">
+ Star rating
+ </div>
+  <div class="ui-block-b" style="font-weight:bold;text-align:center;font-size:10px;">
+ Add a room
+  </div>
+  <div class="ui-block-a" style="margin-right:4px;">
+          
+                <select id="StarRatingSearch" name="StarRatingSearch" data-theme="b">
+                    <option selected value ="0">Any</option>
+                    <option  value ="1">*</option>
+                    <option  value ="2">**</option>
+                    <option  value ="3">***</option>
+                    <option  value ="4">****</option>
+                    <option  value ="5">*****</option>
+
+                </select>
+           
+</div>
+ <div class="ui-block-b">
+                <select id="NumberOfRooms" name="NumberOfRooms"> 
+                    <option value="1" selected>1 Room</option>
+                    <option value="2">2 Room</option>
+                    <option value="3">3 Room</option>
+                </select>
+  
+</div>
+
+ 
+  </div> 
+<dl >
+      <dt style="width: 150px; margin-bottom:4px;"></dt>
+       
+</dl>
+
+ <table  cellspacing="1" cellpadding ="1" data-role="none">
+   <tr><td  class ="searchcriteria_col1">
+   Adults
+  </td><td   class ="searchcriteria_col2">
+   Children 
+   </td><td  class ="searchcriteria_col3">
+   Infants
+ </td>
+   </tr>
+ 
+   
+  <tr>
+  <td class ="searchcriteria_col1">
+  <table  data-role="none">
+  <tr>
+  <td colspan=2>   @Html.TextBoxFor(model => model.RoomOneAdults, new { @class = "numberinput" })
+   
+       @*<input type="text"   data-role="none" id="RoomOneAdults" name="RoomOneAdults"  class="numberinput" value="1"/>*@
+ </td>
+ </tr>
+ <tr>
+
+  <td align="left">
+ <button type="button"  data-role="none"  id="RoomOneAdultsdec" class="but" >-</button> 
+ </td><td align="right"> 
+  <button type="button" data-role="none" id="RoomOneAdultsinc" class="but" >+</button> 
+ </td>
+ </tr>
+  
+  </table>
+   </td> 
+  
+  <td class ="searchcriteria_col2">
+  <table>
+  <tr>
+  <td colspan=2>
+  @* <input type="text" data-role="none" id="RoomOneChildren" name="RoomOneChildren" value="0" class="numberinput"/> *@
+   @Html.TextBoxFor(model => model.RoomOneChildren, new { @class = "numberinput" })       
+   </td>
+ </tr>
+ <tr>
+
+  <td align="left">
+<button type="button" data-role="none"  id="RoomOneChildrendec" class="but">-</button> 
+ </td><td align="right">  
+<button type="button" data-role="none"  id="RoomOneChildreninc" class="but">+</button>  
+ </td>
+ </tr>
+  
+  </table>
+ </td>
+  
+ <td class ="searchcriteria_col3">
+ <table>
+  <tr>
+  <td colspan=2>
+ 
+    @* <input type="text" id="RoomOneInfants" name="RoomOneInfants"value="0" class="numberinput"/>*@
+     @Html.TextBoxFor(model => model.RoomOneInfants, new { @class = "numberinput" })               
+  
+  </td>  
+   </tr>
+ <tr>
+
+  <td align="left">
+<button type="button" data-role="none"  id="RoomOneInfantsdec" class="but">-</button>  
+ </td><td align="right">
+     
+<button type="button"  data-role="none" id="RoomOneInfantsinc" class="but">+</button>  
+ </td>
+ </tr>
+  
+  </table>
+ </td> 
+ </tr>
+ </table>
+ <table>
+  <tr>
+  <td>
+   @Html.ValidationMessageFor(model => model.RoomOneAdults) 
+   @Html.ValidationMessageFor(model => model.RoomOneChildren) 
+   @Html.ValidationMessageFor(model => model.RoomOneInfants) 
+  </td>
+  </tr>
+  </table>
+  
+<table  cellspacing="1" cellpadding ="1" data-role="none" id="pnlRoom2Option"   style="display:none">
+   <tr>
+  <td class ="searchcriteria_col1">
+  <table>
+  <tr>
+  <td colspan=2>
+  
+ @*  <input type="text"   data-role="none" id="RoomTwoAdults" name="RoomTwoAdults"  class="numberinput" value="1"/>*@
+    @Html.TextBoxFor(model => model.RoomTwoAdults, new { @class = "numberinput" })
+
+ </td>
+ </tr>
+ <tr>
+
+  <td align="left">
+ <button type="button"  data-role="none"  id="RoomTwoAdultsdec" class="but" >-</button> 
+ </td><td align="right"> 
+  <button type="button" data-role="none" id="RoomTwoAdultsinc" class="but" >+</button> 
+ </td>
+ </tr>
+  </table>
+   </td> 
+  
+  <td class ="searchcriteria_col2">
+  <table>
+  <tr>
+  <td colspan=2>
+  @* <input type="text" data-role="none" id="RoomTwoChildren" name="RoomOneChildren" value="0" class="numberinput"/> 
+        *@
+      @Html.TextBoxFor(model => model.RoomTwoChildren, new { @class = "numberinput" })
+   </td>
+ </tr>
+ <tr>
+
+  <td align="left">
+<button type="button" data-role="none"  id="RoomTwoChildrendec" class="but">-</button> 
+ </td><td align="right">  
+<button type="button" data-role="none"  id="RoomTwoChildreninc" class="but">+</button>  
+ </td>
+ </tr>
+  </table>
+ </td>
+  
+ <td class ="searchcriteria_col3">
+ <table>
+  <tr>
+  <td colspan=2>
+   @*  <input data-role="none" type="text" id="RoomTwoInfants" name="RoomTwoInfants"value="0" class="numberinput"/>        *@
+    @Html.TextBoxFor(model => model.RoomTwoInfants, new { @class = "numberinput" })
+  </td>
+   </tr>
+ <tr>
+
+  <td align="left">
+<button type="button" data-role="none"  id="RoomTwoInfantsdec" class="but">-</button>  
+ </td><td align="right">
+     
+<button type="button"  data-role="none" id="RoomTwoInfantsinc" class="but">+</button>  
+ </td>
+ </tr>
+  </table>
+ </td> 
+ </tr>
+ </table>   
+ 
+  
+<table  cellspacing="1" cellpadding ="1" data-role="none"  id="pnlRoom3Option"   style="display:none">
+   <tr>
+  <td class ="searchcriteria_col1">
+  <table>
+  <tr>
+  <td colspan=2> @*<input type="text"   data-role="none" id="RoomThreeAdults" name="RoomThreeAdults"  class="numberinput" value="1"/>*@
+
+    @Html.TextBoxFor(model => model.RoomThreeAdults, new { @class = "numberinput" })
+
+ </td>
+ </tr>
+ <tr>
+
+  <td align="left">
+ <button type="button"  data-role="none"  id="RoomThreeAdultsdec" class="but" >-</button> 
+ </td><td align="right"> 
+  <button type="button" data-role="none" id="RoomThreeAdultsinc" class="but" >+</button> 
+ </td>
+ </tr>
+  </table>
+   </td> 
+  
+  <td class ="searchcriteria_col2">
+  <table>
+  <tr>
+  <td colspan=2>
+   @*<input type="text" data-role="none" id="RoomThreeChildren" name="RoomThreeChildren" value="0" class="numberinput"/>        *@
+     @Html.TextBoxFor(model => model.RoomThreeChildren, new { @class = "numberinput" })
+   </td>
+ </tr>
+ <tr>
+
+  <td align="left">
+<button type="button" data-role="none"  id="RoomThreeChildrendec" class="but">-</button> 
+ </td><td align="right">  
+<button type="button" data-role="none"  id="RoomThreeChildreninc" class="but">+</button>  
+ </td>
+ </tr>
+  </table>
+ </td>
+  
+ <td class ="searchcriteria_col3">
+ <table>
+  <tr>
+  <td colspan=2>
+     @*<input data-role="none" type="text" id="RoomThreeInfants" name="RoomThreeInfants"value="0" class="numberinput"/>        *@
+       @Html.TextBoxFor(model => model.RoomThreeInfants, new { @class = "numberinput" })
+  </td>
+   </tr>
+ <tr>
+
+  <td align="left">
+<button type="button" data-role="none"  id="RoomThreeInfantsdec" class="but">-</button>  
+ </td><td align="right">
+     
+<button type="button"  data-role="none" id="RoomThreeInfantsinc" class="but">+</button>  
+ </td>
+ </tr>
+  </table>
+ </td> 
+ </tr>
+ </table>  
+ 
+ 
+<dl>
+    <dt>
+ 
+        <input id="btnHotelSearch" type="submit" value="Search"  />
+    </dt>
+</dl>
+  
+  
+</form>
+   
+   @*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

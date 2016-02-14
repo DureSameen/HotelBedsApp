@@ -22,11 +22,11 @@
        
  </script>
   }
-
-<form id="form" name="form" method="post" action="@Url.Action("Index", "Home")"  data-ajax="false">
-  
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+ {
+ 
  <dl>
-    <dt id="lblDestinationText" >Destination Code<span class="asterisk"></span></dt>
+    <dt id="lblDestinationText" >Destination Code<span class="asterisk">*</span></dt>
     <dt>
         @Html.EditorFor(model => model.DestinationCode ,new { Value = "MCO" })
         @Html.ValidationMessageFor(model => model.DestinationCode)
@@ -34,6 +34,16 @@
         
     </dt>
 </dl>
+
+    <dl>
+        <dt id="lblDestinationText">Zone <span class="asterisk">*</span></dt>
+        <dt>
+            @Html.EditorFor(model => model.Zone )
+            @Html.ValidationMessageFor(model => model.Zone)
+
+
+        </dt>
+    </dl>
 <dl>
     <dt>Country Code<span class="asterisk"></span></dt>
     <dt>
@@ -338,8 +348,8 @@
 </dl>
   
   
-</form>
+}
    
-   @*@section Scripts {
+   @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}*@
+}

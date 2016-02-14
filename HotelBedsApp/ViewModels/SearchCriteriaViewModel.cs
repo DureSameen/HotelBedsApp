@@ -5,6 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.ComponentModel;
+using com.hotelbeds.distribution.hotel_api_sdk.helpers;
 namespace HotelBedsApp.ViewModel
 {
     public class SearchCriteriaViewModel
@@ -14,7 +15,7 @@ namespace HotelBedsApp.ViewModel
         public string    DestinationCode{ get; set; }
 
         public string CountryCode { get; set; }
-
+        public int? Zone { get; set; }
         public string HotelCodes { get; set; }
 
         [Required(ErrorMessage = "Please enter departure date")]
@@ -49,7 +50,24 @@ namespace HotelBedsApp.ViewModel
         public int RoomThreeChildren { get; set; }
         public int RoomThreeInfants { get; set; }
 
-
+        public List<Passenger> Passengers { get; set; }
          
+    }
+    public class Passenger
+    {
+        public RoomDetail.GuestType type { get; set; }
+        public string name { get; set; }
+        public string surname { get; set; }
+        public int age { get; set; }
+        public int roomId { get; set; }
+
+        public Passenger(com.hotelbeds.distribution.hotel_api_sdk.helpers.RoomDetail.GuestType type, int age, string name, string surname, int roomId)
+        { this.type = type;
+        this.age = age;
+        this.name = name;
+
+        this.surname = surname;
+        this.roomId = roomId;
+        }
     }
 }

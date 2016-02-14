@@ -141,7 +141,7 @@ namespace com.hotelbeds.distribution.hotel_api_sdk_demo
 
                     ConfirmRoom confirmRoom = new ConfirmRoom();
                     confirmRoom.details = new List<RoomDetail>();
-                    confirmRoom.detailed(RoomDetail.GuestType.ADULT, 30, "NombrePasajero1", "ApellidoPasajero1", 1);
+                    confirmRoom.detailed(RoomDetail.GuestType.ADULT, 30, "NombrePasajero1","ApellidoPasajero1", 1);
                     confirmRoom.detailed(RoomDetail.GuestType.ADULT, 30, "NombrePasajero2", "ApellidoPasajero2", 1);
 
                     BookingCheck bookingCheck = new BookingCheck();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HotelBedsApp.ViewModel;
+using com.hotelbeds.distribution.hotel_api_sdk.helpers;
 namespace HotelBedsApp.Controllers
 {
     public class HomeController : Controller
@@ -32,10 +33,28 @@ namespace HotelBedsApp.Controllers
         [HttpPost]
         public ActionResult Index(SearchCriteriaViewModel searchcriteria)
         {
-            //When user enter search criteria, page will be validated by its model class data annotations, like required, datatype etc.
-            //If all data is valid  , it will put it into Session and take user to wait page.
+              
             if (ModelState.IsValid)
-            {
+            { searchcriteria.Passengers=new List<Passenger> ();
+                for (int i = 0; i < searchcriteria.RoomOneAdults ; i++)
+                {
+                    searchcriteria.Passengers.Add(new Passenger(RoomDetail.GuestType.ADULT, 30, "", "", 1));
+                
+               
+                }
+                for (int i = 0; i < searchcriteria.RoomOneChildren; i++)
+                {
+                    searchcriteria.Passengers.Add(new Passenger(RoomDetail.GuestType.CHILD, 11, "", "", 1));
+
+
+                }
+                for (int i = 0; i < searchcriteria.RoomOneInfants; i++)
+                {
+                    searchcriteria.Passengers.Add(new Passenger(RoomDetail.GuestType.CHILD, 2, "", "", 1));
+
+
+                }
+
                 Session["SearchCriteria"] = searchcriteria;
 
 
@@ -44,8 +63,7 @@ namespace HotelBedsApp.Controllers
 
             else
             {   //if page is not validated then it will remain on same view.
-                ViewBag.ServerDatetime = SetServerTime();
-                ViewBag.CurrentDatetime = SetCurrentDateTime();
+                
                 return View(searchcriteria);
             }
         }

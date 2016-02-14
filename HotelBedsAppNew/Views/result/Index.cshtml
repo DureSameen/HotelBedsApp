@@ -1,0 +1,135 @@
+﻿@model   com.hotelbeds.distribution.hotel_api_model.auto.messages.AvailabilityRS
+
+@{
+    ViewBag.Title = "Result";
+}
+
+<h2>Results (@Model.hotels.hotels.Count()) : Time Taken (@ViewBag.TimeTaken)</h2>
+@section customhead
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            //$(".frm").bind("submit", function () {
+
+            //    var hotelid = $(this).attr("hotelid");
+
+            //    var bookedroomids = "";
+            //    $('input[name^="roomtype-' + hotelid + '"]:checked').each(function (index, selectedroomtype) {
+
+
+            //        var roomid = $(this).attr("roomid");
+            //        var roomtypeid = $(this).attr("roomtypeid");
+            //        bookedroomids = bookedroomids + hotelid + "-" + roomid + "-" + roomtypeid + "|";
+
+            //    });
+                
+            //    $("#hdnBookedRoomID-" + hotelid).val(bookedroomids);
+
+            //});
+
+        });
+        
+   
+   </script>
+
+}
+
+
+  
+
+@foreach (var hotel in Model.hotels.hotels)
+{
+    <form id="frm-@hotel.code" class="frm"  name="frm-@hotel.code" hotelid="@hotel.code" action="@Url.Action("Index", "result")" method="post">
+    <table>
+     <tr>
+        <td> 
+        </td> </tr> 
+    <tr>
+        <td>
+          <table>
+          <tr>
+          <td>
+          <strong>Hotel:@hotel.code </strong> @hotel.name   (@hotel.categoryName*)  (@hotel.currency )
+          
+         <input id="hdnBookedRoomID-@hotel.code" name="hdnBookedRoomID-@hotel.code" type="hidden" />
+          @*<p>@hotel.ShortDescription</p>*@
+          </td>
+          <td>
+           @*<img src ="@hotel.imageUrl"   alt = "@hotel.Name" />*@
+          </td>
+          </tr>
+          @*@if (@hotel.pOffers != null && @hotel.Offers.Count > 0)
+          { 
+          <tr>
+          <td>
+          <strong>Offers</strong>
+          </td> 
+          </tr>
+              foreach (var offer in hotel.Offers)
+              { <tr>
+          <td>
+          @offer
+          </td> 
+          </tr>
+              }
+          }*@
+          </table>
+            @{string rateKey = string.Empty;
+            for (int r = 0; r < hotel.rooms.Count && String.IsNullOrEmpty(rateKey); r++)
+            { var room=hotel.rooms[r];
+
+           <table >
+          <tr ><td colspan="2"> 
+              <strong>Room</strong>@room.code
+              </td>
+              </tr>
+               <tr><td  colspan="2"> 
+            <strong> Passengers :</strong> <text>
+
+
+     @{var adults= room.paxes.Where (p=> p.type.ToString()=="AD");
+      var children = room.paxes.Where(p => p.type.ToString() == "CH");
+            <text> Adults(@adults ), Children( @children )</text>
+     }
+                </td>
+              </tr>
+              
+               @for (int rk = 0; room.rates != null && rk < room.rates.Count && String.IsNullOrEmpty(rateKey); rk++)
+               {
+                   var roomtype = room.rates[rk];
+                   <tr><td> 
+            
+                       <input data-role="none" type="radio" id="roomtype-@hotel.code-@room.code" name="roomtype-@hotel.code-@room.code" hotelid="@hotel.code" roomid="@room.code" roomtypeid="@room.rates[rk]." @((rk == 0) ? "checked" : "") />
+             </td>
+             <td>RateKey (@roomtype.rateKey )<strong> @room.code (@roomtype.boardName) </strong>  @roomtype.amount <text></text>
+             
+              </td>
+              </tr>
+              }
+            </table>
+          }
+}
+          
+
+
+        </td>
+    </tr>
+    <tr>
+    <td>
+   @*@{if (hotel.IsBookOnline)*@     
+    {<input type="submit" value ="Book Online" />  }
+    @*else
+     {<input type="submit" value ="Request Holiday" disabled =true />  }
+    }*@
+    </td>
+    </tr>
+    <tr>
+        <td> 
+        </td> </tr> 
+        </table>
+        </form>
+}
+
+

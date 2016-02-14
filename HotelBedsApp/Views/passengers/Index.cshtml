@@ -1,0 +1,73 @@
+﻿@model HotelBedsApp.ViewModel.SearchCriteriaViewModel
+@{
+    ViewBag.Title = "Passenger";
+}
+
+<h2>Passenger</h2>
+
+@using (Html.BeginForm("Index","passengers"))
+{
+    @Html.ValidationSummary(true)
+    if( Model.Passengers != null)
+    {  
+    <fieldset>
+        <legend>Room 1:  Passengers</legend>
+         
+       @foreach(var pas in  Model.Passengers  )
+       {
+           var counter = 0;
+        <div class="editor-label">
+            Type
+        </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => pas.type, new { id = "pas-@counter.type", name = "pas-@counter.type" })
+
+            </div>
+    <div class="editor-label">
+       Age
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => pas.age, new { id = "pas-@counter.age", name = "pas-@counter.age" })
+
+    </div>
+            <div class="editor-label">
+                Name
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => pas.name, new { id = "pas-@counter.name", name = "pas-@counter.name" })
+                
+            </div>
+
+    <div class="editor-label">
+        Surname
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => pas.surname, new { id = "pas-@counter.surname", name = "pas-@counter.surname" })
+        <input id="pas.roomId" name="pas.roomId" type="hidden" value="@pas.roomId" />
+    </div>
+             
+
+            }
+
+            <p>
+                <input type="submit" value="Book Hotel" />
+            </p>
+
+            <div>
+            </div>
+</fieldset>
+    }
+    } 
+            
+              @if  (!string.IsNullOrEmpty(@ViewBag.Error))
+              { <text>Error : </text> @ViewBag.Error}
+              else
+              {<text>Reference number</text> @ViewBag.BookingRef  }
+          
+       
+         
+
+ 
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
